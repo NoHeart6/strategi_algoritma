@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kalkulator Luas Bangun Datar</title>
+    <!-- Library eksternal -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+    <style>
+        /* Tema default (light) */
+        :root {
+            --bg-color: #f5f5f5;
+            --container-bg: white;
+            --text-color: #333;
+            --primary-color: #2196F3;
+            --secondary-color: #1976D2;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0,0,0,0.1);
+            --header-gradient: linear-gradient(135deg, #2196F3, #1976D2);
+            --form-bg: white;
+        }
+
+        /* Tema gelap */
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --container-bg: #2d2d2d;
+            --text-color: #ffffff;
+            --primary-color: #64b5f6;
+            --secondary-color: #42a5f5;
+            --border-color: #404040;
+            --shadow-color: rgba(0,0,0,0.3);
+            --header-gradient: linear-gradient(135deg, #1976D2, #0d47a1);
+            --form-bg: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            animation: fadeIn 0.8s ease-out;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--header-gradient);
+            border-radius: 10px;
+            color: white;
+        }
+        .header h1 {
+            margin: 0;
+            padding-bottom: 15px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .badge {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 5px;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .creator-info {
+            background: var(--container-bg);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+        .form-group {
+            background-color: var(--form-bg);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .form-group:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            animation: glowing 2s infinite;
+        }
+        .form-group::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: #2196F3;
+            border-radius: 4px 0 0 4px;
+        }
+        .form-group h3 {
+            color: #1976D2;
+            margin-top: 0;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+        input[type="number"] {
+            padding: 12px;
+            margin: 8px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            width: 200px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        input[type="number"]:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33,150,243,0.2);
+            outline: none;
+        }
+        button {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #1976D2, #1565C0);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33,150,243,0.3);
+        }
+        button:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #1565C0;
+            top: 0;
+            left: 0;
+            transform: translateZ(-20px);
+            border-radius: 8px;
+        }
+        .instructions {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            border-left: 4px solid #ff9800;
+            box-shadow: 0 5px 15px rgba(255,152,0,0.1);
+            color: #333333;
+        }
+
+        .instructions h3 {
+            color: #e65100;
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        .instructions ol {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .instructions {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-left: 4px solid #ff9800;
+            color: #333333;
+            box-shadow: 0 5px 20px rgba(255,152,0,0.2);
+        }
+
+        [data-theme="dark"] .instructions h3 {
+            color: #e65100;
+        }
+
+        .instructions:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,152,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .instructions .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .hasil {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .hasil.active {
+            background-color: #e3f2fd;
+            border: 1px solid #2196F3;
+        }
+
+        /* Animasi untuk elemen */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tambahan animasi dan styling baru */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+
+        /* Styling untuk loading spinner */
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, glow 2s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #2196F3; }
+            50% { box-shadow: 0 0 20px #2196F3; }
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Glassmorphism effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Neon effect for special elements */
+        .neon-text {
+            text-shadow: 0 0 5px #fff,
+                         0 0 10px #fff,
+                         0 0 20px #2196F3,
+                         0 0 30px #2196F3,
+                         0 0 40px #2196F3;
+        }
+
+        /* Avatar styling yang lebih advanced */
+        .avatar-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(33,150,243,0.3);
+        }
+
+        .avatar-status {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            border: 3px solid white;
+            animation: pulse 2s infinite;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            right: 140px;
+            bottom: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 280px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(33,150,243,0.2);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            right: -12px;
+            bottom: 20px;
+            border-left: 12px solid rgba(255, 255, 255, 0.95);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+        }
+
+        .avatar-menu {
+            position: absolute;
+            bottom: 130px;
+            right: 0;
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            display: none;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-menu.show {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .avatar-menu-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .avatar-menu-item:hover {
+            background: #f0f7ff;
+            transform: translateX(-5px);
+        }
+
+        .avatar-menu-item i {
+            color: #2196F3;
+        }
+
+        /* Animasi tambahan */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+            100% { transform: translateY(0) rotate(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            gap: 3px;
+            margin-left: 5px;
+        }
+
+        .typing-indicator span {
+            width: 5px;
+            height: 5px;
+            background: #2196F3;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .emoji-reaction {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: flyEmoji 1s ease-out forwards;
+        }
+
+        @keyframes flyEmoji {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+            100% { transform: translate(0, -100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Styling untuk toggle theme button */
+        .theme-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: var(--container-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn i {
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+
+        /* Dark mode specific styles */
+        [data-theme="dark"] .form-group {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .avatar {
+            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+        }
+
+        [data-theme="dark"] .speech-bubble {
+            background: rgba(45, 45, 45, 0.95);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .speech-bubble:after {
+            border-left-color: rgba(45, 45, 45, 0.95);
+        }
+
+        [data-theme="dark"] .avatar-menu {
+            background: var(--container-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        [data-theme="dark"] .avatar-menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .highlight {
+            animation: highlightResult 1s ease-in-out;
+        }
+
+        @keyframes highlightResult {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .invalid {
+            animation: shake 0.5s ease-in-out;
+            border-color: #ff4444 !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .result-container {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            color: #2196F3;
+            margin: 1rem 0;
+            font-weight: bold;
+        }
+
+        .result-formula {
+            color: #666;
+            font-style: italic;
+        }
+
+        .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        .loading-spinner::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle background container -->
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <div class="header animate__animated animate__fadeInDown">
+            <h1>Kalkulator Luas Bangun Datar</h1>
+            <div class="badge">Teknik Informatika</div>
+            <div class="badge">NIM: 231240001422</div>
+            <div class="badge">Kelas DB</div>
+        </div>
+
+        <div class="creator-info glass-effect" data-aos="fade-up">
+            <h3>Informasi Aplikasi</h3>
+            <p><strong>Dikembangkan oleh:</strong> Wisnu Hidayat</p>
+            <p><strong>Mata Kuliah:</strong> Strategi Algoritma</p>
+            <p><strong>Dosen Pengampu:</strong> Bapak Adi Sucipto</p>
+            <p><strong>Deskripsi:</strong> Aplikasi ini dikembangkan untuk memenuhi tugas UTS mata kuliah Strategi Algoritma. 
+            Kalkulator ini dapat menghitung luas dari berbagai bangun datar seperti segitiga, jajargenjang, bujur sangkar, 
+            lingkaran, dan trapesium dengan mudah dan akurat.</p>
+        </div>
+
+        <div class="instructions" data-aos="fade-right">
+            <h3>📝 Petunjuk Penggunaan:</h3>
+            <ol>
+                <li><span class="emoji">📐</span> Pilih jenis bangun datar yang ingin dihitung</li>
+                <li><span class="emoji">✏️</span> Masukkan nilai yang diperlukan pada kolom input</li>
+                <li><span class="emoji">🔢</span> Klik tombol hitung untuk melihat hasil</li>
+                <li><span class="emoji">🎉</span> Hasil perhitungan akan muncul di bawah tombol</li>
+            </ol>
+            <div class="instruction-note">
+                <small><em>Tips: Gunakan angka positif untuk hasil yang akurat</em></small>
+            </div>
+        </div>
+
+        <!-- Segitiga -->
+        <div class="form-group glass-effect" data-aos="zoom-in">
+            <h3><i class="fas fa-triangle floating"></i> 1. Luas Segitiga</h3>
+            <p>Rumus: L = ½ × alas × tinggi</p>
+            <input type="number" id="alasSegitiga" placeholder="Masukkan alas">
+            <input type="number" id="tinggiSegitiga" placeholder="Masukkan tinggi">
+            <button onclick="hitungSegitiga()">Hitung</button>
+            <p>Hasil: <span id="hasilSegitiga"></span></p>
+        </div>
+
+        <!-- Jajargenjang -->
+        <div class="form-group glass-effect" data-aos="zoom-in">
+            <h3><i class="fas fa-square floating"></i> 2. Luas Jajargenjang</h3>
+            <p>Rumus: L = alas × tinggi</p>
+            <input type="number" id="alasJajargenjang" placeholder="Masukkan alas">
+            <input type="number" id="tinggiJajargenjang" placeholder="Masukkan tinggi">
+            <button onclick="hitungJajargenjang()">Hitung</button>
+            <p>Hasil: <span id="hasilJajargenjang"></span></p>
+        </div>
+
+        <!-- Bujur Sangkar -->
+        <div class="form-group glass-effect" data-aos="zoom-in">
+            <h3><i class="fas fa-square floating"></i> 3. Luas Bujur Sangkar</h3>
+            <p>Rumus: L = sisi × sisi</p>
+            <input type="number" id="sisiBujursangkar" placeholder="Masukkan sisi">
+            <button onclick="hitungBujursangkar()">Hitung</button>
+            <p>Hasil: <span id="hasilBujursangkar"></span></p>
+        </div>
+
+        <!-- Lingkaran -->
+        <div class="form-group glass-effect" data-aos="zoom-in">
+            <h3><i class="fas fa-circle floating"></i> 4. Luas Lingkaran</h3>
+            <p>Rumus: L = π × r²</p>
+            <input type="number" id="jariLingkaran" placeholder="Masukkan jari-jari">
+            <button onclick="hitungLingkaran()">Hitung</button>
+            <p>Hasil: <span id="hasilLingkaran"></span></p>
+        </div>
+
+        <!-- Trapesium -->
+        <div class="form-group glass-effect" data-aos="zoom-in">
+            <h3><i class="fas fa-square floating"></i> 5. Luas Trapesium</h3>
+            <p>Rumus: L = ½ × (a + b) × t</p>
+            <input type="number" id="sisiAtasTrapesium" placeholder="Masukkan sisi atas">
+            <input type="number" id="sisiBawahTrapesium" placeholder="Masukkan sisi bawah">
+            <input type="number" id="tinggiTrapesium" placeholder="Masukkan tinggi">
+            <button onclick="hitungTrapesium()">Hitung</button>
+            <p>Hasil: <span id="hasilTrapesium"></span></p>
+        </div>
+    </div>
+
+    <!-- Library Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <div class="avatar-container">
+        <div class="avatar-menu">
+            <div class="avatar-menu-item" onclick="toggleTheme()">
+                <i class="fas fa-moon"></i> Ubah Tema
+            </div>
+            <div class="avatar-menu-item" onclick="showTutorial()">
+                <i class="fas fa-book"></i> Tutorial
+            </div>
+            <div class="avatar-menu-item" onclick="showInfo()">
+                <i class="fas fa-info-circle"></i> Tentang
+            </div>
+        </div>
+        <div class="speech-bubble">
+            <span class="message-text">Hai! Saya akan membantu kamu menghitung luas bangun datar 😊</span>
+            <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="avatar-wrapper">
+            <img src="https://api.dicebear.com/6.x/adventurer/svg?seed=Felix" alt="Assistant Avatar" class="avatar">
+            <div class="avatar-status"></div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk menambahkan animasi pada hasil
+        function animateResult(elementId) {
+            const hasil = document.querySelector(`#${elementId}`).parentElement;
+            hasil.classList.add('active');
+            setTimeout(() => hasil.classList.remove('active'), 1000);
+        }
+
+        // Update fungsi perhitungan untuk menambahkan animasi
+        function hitungSegitiga() {
+            // Ambil nilai input
+            let alas = document.getElementById('alasSegitiga').value;
+            let tinggi = document.getElementById('tinggiSegitiga').value;
+            
+            // Konversi ke number dan validasi
+            alas = parseFloat(alas);
+            tinggi = parseFloat(tinggi);
+            
+            // Cek apakah input valid
+            if (isNaN(alas) || isNaN(tinggi) || alas <= 0 || tinggi <= 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Input Tidak Valid',
+                    text: 'Mohon masukkan angka yang valid (lebih besar dari 0)!'
+                });
+                return;
+            }
+            
+            // Hitung luas
+            let luas = 0.5 * alas * tinggi;
+            
+            // Tampilkan hasil
+            document.getElementById('hasilSegitiga').textContent = luas.toFixed(2);
+            
+            // Tampilkan alert sukses
+            Swal.fire({
+                icon: 'success',
+                title: 'Perhitungan Selesai!',
+                html: `
+                    <div class="result-container">
+                        <p>Luas Segitiga:</p>
+                        <h3 class="result-value">${luas.toFixed(2)}</h3>
+                        <p class="result-formula">L = ½ × ${alas} × ${tinggi}</p>
+                    </div>
+                `
+            });
+        }
+
+        // Update fungsi lainnya dengan cara yang sama
+        function hitungJajargenjang() {
+            let alas = parseFloat(document.getElementById('alasJajargenjang').value);
+            let tinggi = parseFloat(document.getElementById('tinggiJajargenjang').value);
+            
+            if (isNaN(alas) || isNaN(tinggi)) {
+                document.getElementById('hasilJajargenjang').innerHTML = "Masukkan nilai yang valid";
+                return;
+            }
+            
+            let luas = alas * tinggi;
+            document.getElementById('hasilJajargenjang').innerHTML = luas.toFixed(2);
+            animateResult('hasilJajargenjang');
+        }
+
+        // Algoritma untuk menghitung luas bujur sangkar
+        function hitungBujursangkar() {
+            let sisi = parseFloat(document.getElementById('sisiBujursangkar').value);
+            let luas = sisi * sisi;
+            document.getElementById('hasilBujursangkar').innerHTML = luas;
+        }
+
+        // Algoritma untuk menghitung luas lingkaran
+        function hitungLingkaran() {
+            let jari = parseFloat(document.getElementById('jariLingkaran').value);
+            let luas = Math.PI * jari * jari;
+            document.getElementById('hasilLingkaran').innerHTML = luas.toFixed(2);
+        }
+
+        // Algoritma untuk menghitung luas trapesium
+        function hitungTrapesium() {
+            let sisiAtas = parseFloat(document.getElementById('sisiAtasTrapesium').value);
+            let sisiBawah = parseFloat(document.getElementById('sisiBawahTrapesium').value);
+            let tinggi = parseFloat(document.getElementById('tinggiTrapesium').value);
+            let luas = 0.5 * (sisiAtas + sisiBawah) * tinggi;
+            document.getElementById('hasilTrapesium').innerHTML = luas;
+        }
+
+        // Tambahkan event listeners untuk input validation
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) {
+                    this.style.borderColor = '#ff4444';
+                    this.style.animation = 'shake 0.5s';
+                    setTimeout(() => {
+                        this.style.animation = '';
+                    }, 500);
+                    this.value = 0;
+                } else {
+                    this.style.borderColor = '#2196F3';
+                }
+            });
+        });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Initialize Particles.js
+        particlesJS('particles-js',
+            {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#2196F3"
+                    },
+                    "shape": {
+                        "type": "circle"
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#2196F3",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false
+                    }
+                }
+            }
+        );
+
+        // Loading helpers
+        function showLoading() {
+            document.querySelector('.loading-spinner').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.querySelector('.loading-spinner').style.display = 'none';
+        }
+
+        // Add hover sound effect (optional)
+        const hoverSound = new Audio('path/to/hover-sound.mp3');
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                hoverSound.currentTime = 0;
+                hoverSound.play();
+            });
+        });
+
+        // Avatar interaction yang lebih advanced
+        class AvatarAssistant {
+            constructor() {
+                this.avatar = document.querySelector('.avatar');
+                this.speechBubble = document.querySelector('.speech-bubble');
+                this.messageText = document.querySelector('.message-text');
+                this.typingIndicator = document.querySelector('.typing-indicator');
+                this.avatarMenu = document.querySelector('.avatar-menu');
+                this.currentMessage = 0;
+                this.isTyping = false;
+                this.messages = [
+                    "Hai! Saya akan membantu kamu menghitung luas bangun datar 😊",
+                    "Masukkan nilai dengan benar ya! 📏",
+                    "Butuh bantuan? Tanya saja! 💡",
+                    "Jangan lupa cek hasil perhitungannya 🔍",
+                    "Matematika itu menyenangkan! ✨",
+                    "Kamu sudah semakin mahir! 🌟",
+                    "Perlu bantuan lain? Klik saja aku 👋",
+                    "Selamat belajar! 📚"
+                ];
+                this.emojis = ["✨", "💫", "⭐", "🌟", "💡", "📐", "🎯"];
+                this.initializeEvents();
+
+                // Tambahkan pesan khusus tema
+                this.themeMessages = {
+                    light: "Sekarang lebih terang! ☀️",
+                    dark: "Sekarang lebih nyaman di malam hari! 🌙"
+                };
+            }
+
+            initializeEvents() {
+                this.avatar.addEventListener('click', () => this.toggleMenu());
+                this.avatar.addEventListener('mouseover', () => this.showRandomEmoji());
+                document.addEventListener('click', (e) => this.handleClickOutside(e));
+            }
+
+            async showMessage(message, withTyping = true) {
+                if (this.isTyping) return;
+                
+                this.speechBubble.classList.add('show');
+                
+                if (withTyping) {
+                    this.isTyping = true;
+                    this.messageText.textContent = '';
+                    this.typingIndicator.style.display = 'inline-flex';
+                    
+                    await this.wait(1000);
+                    
+                    for (let char of message) {
+                        this.messageText.textContent += char;
+                        await this.wait(50);
+                    }
+                    
+                    this.typingIndicator.style.display = 'none';
+                    this.isTyping = false;
+                } else {
+                    this.messageText.textContent = message;
+                }
+                
+                setTimeout(() => {
+                    this.speechBubble.classList.remove('show');
+                }, 5000);
+            }
+
+            toggleMenu() {
+                const isMenuVisible = this.avatarMenu.classList.contains('show');
+                
+                if (isMenuVisible) {
+                    this.avatarMenu.classList.remove('show');
+                } else {
+                    this.avatarMenu.classList.add('show');
+                    this.showMessage(this.messages[this.currentMessage], false);
+                    this.currentMessage = (this.currentMessage + 1) % this.messages.length;
+                }
+            }
+
+            showRandomEmoji() {
+                const emoji = this.emojis[Math.floor(Math.random() * this.emojis.length)];
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'emoji-reaction';
+                emojiElement.textContent = emoji;
+                
+                const avatarRect = this.avatar.getBoundingClientRect();
+                emojiElement.style.left = `${avatarRect.left + avatarRect.width / 2}px`;
+                emojiElement.style.top = `${avatarRect.top}px`;
+                
+                document.body.appendChild(emojiElement);
+                
+                setTimeout(() => emojiElement.remove(), 1000);
+            }
+
+            handleClickOutside(event) {
+                if (!this.avatarMenu.contains(event.target) && 
+                    !this.avatar.contains(event.target)) {
+                    this.avatarMenu.classList.remove('show');
+                }
+            }
+
+            wait(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Initialize avatar assistant
+        const assistant = new AvatarAssistant();
+
+        // Theme toggle function
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            assistant.showMessage("Tema berhasil diubah! 🌓");
+        }
+
+        // Tutorial function
+        function showTutorial() {
+            Swal.fire({
+                title: 'Tutorial Penggunaan',
+                html: `
+                    <div class="tutorial-steps">
+                        <p>1. Pilih jenis bangun datar 📐</p>
+                        <p>2. Masukkan nilai yang diperlukan ✏️</p>
+                        <p>3. Klik tombol hitung 🔢</p>
+                        <p>4. Lihat hasilnya! 🎉</p>
+                    </div>
+                `,
+                icon: 'info',
+                confirmButtonText: 'Mengerti!'
+            });
+        }
+
+        // Info function
+        function showInfo() {
+            Swal.fire({
+                title: 'Tentang Aplikasi',
+                html: `
+                    <div class="about-info">
+                        <p>Dibuat oleh: Wisnu Hidayat</p>
+                        <p>Versi: 1.0.0</p>
+                        <p>Mata Kuliah: Strategi Algoritma</p>
+                    </div>
+                `,
+                icon: 'info'
+            });
+        }
+
+        // Fungsi untuk mengelola tema
+        class ThemeManager {
+            constructor() {
+                this.theme = localStorage.getItem('theme') || 'light';
+                this.init();
+            }
+
+            init() {
+                // Set tema awal
+                document.documentElement.setAttribute('data-theme', this.theme);
+                
+                // Update icon pada menu avatar
+                this.updateThemeIcon();
+            }
+
+            toggleTheme() {
+                this.theme = this.theme === 'light' ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', this.theme);
+                localStorage.setItem('theme', this.theme);
+                
+                // Update icon dan tampilkan notifikasi
+                this.updateThemeIcon();
+                this.showThemeNotification();
+            }
+
+            updateThemeIcon() {
+                const themeIcon = document.querySelector('.avatar-menu-item i[class*="fa-"]');
+                if (themeIcon) {
+                    themeIcon.className = this.theme === 'light' ? 
+                        'fas fa-moon' : 'fas fa-sun';
+                }
+            }
+
+            showThemeNotification() {
+                const message = this.theme === 'light' ? 
+                    'Tema Terang Diaktifkan ☀️' : 'Tema Gelap Diaktifkan 🌙';
+                
+                Swal.fire({
+                    title: message,
+                    icon: 'success',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: this.theme === 'light' ? '#fff' : '#333',
+                    color: this.theme === 'light' ? '#333' : '#fff'
+                });
+            }
+        }
+
+        // Inisialisasi Theme Manager
+        const themeManager = new ThemeManager();
+
+        // Update fungsi toggleTheme
+        function toggleTheme() {
+            themeManager.toggleTheme();
+            assistant.showMessage(
+                themeManager.theme === 'light' ? 
+                "Tema terang diaktifkan! ☀️" : 
+                "Tema gelap diaktifkan! 🌙"
+            );
+        }
+
+        // Tambahkan event listener untuk shortcut keyboard (opsional)
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 't') { // Ctrl + T
+                toggleTheme();
+            }
+        });
+
+        // Tambahkan event listener untuk input validation
+        document.getElementById('alasSegitiga').addEventListener('input', validateInput);
+        document.getElementById('tinggiSegitiga').addEventListener('input', validateInput);
+
+        function validateInput(e) {
+            const value = parseFloat(e.target.value);
+            if (value < 0) {
+                e.target.value = 0;
+                e.target.classList.add('invalid');
+                setTimeout(() => e.target.classList.remove('invalid'), 500);
+            }
+        }
+    </script>
+</body>
+</html>
