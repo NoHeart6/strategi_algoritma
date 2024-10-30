@@ -1,0 +1,1 @@
+# strategi_algoritma
