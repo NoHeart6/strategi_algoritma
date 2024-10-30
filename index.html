@@ -19,6 +19,8 @@
             --shadow-color: rgba(0,0,0,0.1);
             --header-gradient: linear-gradient(135deg, #2196F3, #1976D2);
             --form-bg: white;
+            --container-padding: 15px;
+            --form-padding: 15px;
         }
 
         /* Tema gelap */
@@ -46,7 +48,7 @@
             max-width: 800px;
             margin: 0 auto;
             background-color: var(--container-bg);
-            padding: 30px;
+            padding: var(--container-padding);
             border-radius: 15px;
             box-shadow: 0 10px 30px var(--shadow-color);
             animation: fadeIn 0.8s ease-out;
@@ -91,7 +93,7 @@
         }
         .form-group {
             background-color: var(--form-bg);
-            padding: 25px;
+            padding: var(--form-padding);
             border-radius: 12px;
             margin-bottom: 25px;
             border: 1px solid var(--border-color);
@@ -579,7 +581,345 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 6px 15px;
+                margin: 3px;
+            }
+
+            .form-group {
+                padding: 15px;
+            }
+
+            .form-group h3 {
+                font-size: 1.2em;
+            }
+
+            input[type="number"] {
+                width: 100%;
+                margin: 8px 0;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .creator-info, .instructions {
+                padding: 15px;
+            }
+
+            /* Avatar adjustments for mobile */
+            .avatar-container {
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            .speech-bubble {
+                right: 100px;
+                bottom: 50px;
+                max-width: 200px;
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+
+            .avatar-menu {
+                bottom: 90px;
+                right: 0;
+            }
+
+            .avatar-menu-item {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Additional responsive adjustments for very small screens */
+        @media screen and (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .creator-info p, .instructions p {
+                font-size: 14px;
+            }
+
+            .form-group h3 {
+                font-size: 1.1em;
+            }
+
+            .badge {
+                display: block;
+                margin: 5px auto;
+                max-width: 200px;
+            }
+
+            /* Stack badges vertically on very small screens */
+            .header .badge {
+                display: inline-block;
+                margin: 3px;
+            }
+
+            /* Adjust avatar position for better visibility */
+            .avatar-container {
+                transform: scale(0.8);
+                transform-origin: bottom right;
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media screen and (max-height: 600px) and (orientation: landscape) {
+            .container {
+                margin-top: 10px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            /* Hide or adjust avatar for landscape mode */
+            .avatar-container {
+                transform: scale(0.7);
+                transform-origin: bottom right;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .avatar-container,
+            button,
+            .instructions {
+                display: none;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .form-group {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Base mobile-first styles */
+        :root {
+            --container-padding: 15px;
+            --form-padding: 15px;
+        }
+
+        /* Container adjustments */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: var(--container-padding);
+            box-sizing: border-box;
+        }
+
+        /* Header adjustments */
+        .header {
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        /* Badge adjustments */
+        .badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            margin: 3px;
+            white-space: normal;
+            text-align: center;
+        }
+
+        /* Form group adjustments */
+        .form-group {
+            padding: var(--form-padding);
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Input adjustments */
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            font-size: 16px; /* Prevents zoom on iOS */
+        }
+
+        /* Button adjustments */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        /* Mobile-specific styles */
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .creator-info,
+            .instructions {
+                padding: 15px;
+                margin: 10px 0;
+            }
+
+            .form-group {
+                padding: 15px;
+                margin: 10px 0;
+            }
+
+            .form-group h3 {
+                font-size: 1.1rem;
+            }
+
+            input[type="number"] {
+                margin: 5px 0;
+            }
+
+            /* Adjust avatar for mobile */
+            .avatar-container {
+                position: fixed;
+                bottom: 10px;
+                right: 10px;
+                transform: scale(0.7);
+                transform-origin: bottom right;
+            }
+
+            .speech-bubble {
+                display: none; /* Hide speech bubble on mobile */
+            }
+        }
+
+        /* Extra small devices */
+        @media screen and (max-width: 480px) {
+            .container {
+                padding: 8px;
+            }
+
+            .header {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.2rem;
+            }
+
+            .badge {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+
+            .form-group {
+                padding: 12px;
+            }
+
+            .form-group h3 {
+                font-size: 1rem;
+            }
+
+            .creator-info p,
+            .instructions p {
+                font-size: 0.9rem;
+            }
+
+            /* Further reduce avatar size */
+            .avatar-container {
+                transform: scale(0.6);
+            }
+        }
+
+        /* Landscape mode */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .container {
+                margin-top: 5px;
+            }
+
+            .header {
+                padding: 8px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            /* Hide avatar in landscape mode */
+            .avatar-container {
+                display: none;
+            }
+        }
+
+        /* Fix for iOS input zoom */
+        @supports (-webkit-touch-callout: none) {
+            input[type="number"] {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Ensure all interactive elements are large enough to tap */
+        button,
+        input,
+        .avatar,
+        .avatar-menu-item {
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        /* Fix for notched phones */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(var(--container-padding), env(safe-area-inset-left));
+                padding-right: max(var(--container-padding), env(safe-area-inset-right));
+                padding-bottom: max(var(--container-padding), env(safe-area-inset-bottom));
+            }
+        }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
     <!-- Particle background container -->
@@ -977,7 +1317,7 @@
         // Theme toggle function
         function toggleTheme() {
             document.body.classList.toggle('dark-theme');
-            assistant.showMessage("Tema berhasil diubah! 🌓");
+            assistant.showMessage("Tema berhasil diubah! ");
         }
 
         // Tutorial function
